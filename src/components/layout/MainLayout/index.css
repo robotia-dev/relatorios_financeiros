@@ -1,0 +1,16 @@
+footer {
+    position: fixed; /* Fixa o footer na parte inferior */
+    bottom: 0; /* Posiciona na parte inferior */
+    left: 0; /* Alinha à esquerda */
+    right: 0; /* Alinha à direita */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+  }
+
+  header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  

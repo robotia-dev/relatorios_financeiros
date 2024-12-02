@@ -1,0 +1,150 @@
+
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+/* index.css */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 60px;
+  align-items: center;
+}
+
+.home-layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 100px;
+  /* justify-content: center;
+  align-items: center; */
+  /* padding: 20px; */
+}
+
+@media (max-width: 768px) {
+  .home-layout {
+    padding: 10px;
+  }
+}
+@media (max-width: 768px) {
+  .home-layout {
+    padding: 10px;
+  }
+  .container-fluid {
+    padding: 0;
+  }
+  .row {
+    margin: 0;
+  }
+  .col-md-8 {
+    width: 100%;
+  }
+}
+
+
+.gradient-background {
+  background: linear-gradient(45deg, #007BFF, #28a745, #FFC107, #DC3545);
+  padding-top: 60px;
+  width: 100%;
+  position: relative; /* Para permitir posicionamento absoluto de elementos internos */
+  overflow: hidden; /* Para esconder qualquer elemento que ultrapasse */
+}
+
+.icons-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.icon {
+  width: 4rem;
+  height: auto;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+.specialized-text {
+  display: inline-block; /* Permite definir largura e altura */
+  background-color: black; /* Fundo preto */
+  color: #ccc; /* Cor clara para o texto */
+  font-size: 1.2rem; /* Tamanho da fonte maior */
+  padding: 10px 20px; /* Espaçamento interno */
+  position: relative; /* Para posicionar o pseudo-elemento */
+  overflow: hidden; /* Para esconder qualquer conteúdo que ultrapasse */
+}
+
+.specialized-text::before {
+  content: ''; /* Necessário para criar um pseudo-elemento */
+  position: absolute;
+  top: 50%; /* Centraliza verticalmente */
+  left: 0;
+  right: 0;
+  height: 2px; /* Altura da linha */
+  background-image: linear-gradient(to right, transparent, yellow, transparent, yellow, transparent); /* Linhas amarelas */
+  background-size: 20px 100%; /* Aumenta o espaço entre as linhas */
+  background-repeat: repeat; /* Repete a linha */
+  transform: translateY(-50%); /* Ajusta a linha para o centro */
+}
+
+.car-icon {
+  position: absolute; /* Para posicionar o ícone em relação ao span */
+  left: 10px; /* Distância do lado esquerdo */
+  top: 50%; /* Centraliza verticalmente */
+  transform: translateY(-50%); /* Ajusta verticalmente */
+  animation: drive 10s linear infinite; /* Animação do carro */
+}
+
+@keyframes drive {
+  0% { transform: translate(0, -50%); }
+  100% { transform: translate(800px, -50%); } /* Aumente a distância conforme necessário */
+}
