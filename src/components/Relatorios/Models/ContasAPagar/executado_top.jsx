@@ -7,8 +7,7 @@ import {
   MDBIcon,
   MDBTooltip,
 } from "mdb-react-ui-kit";
-import './style.css';
-
+import  './style.css';
 class TabelaDadosContasAPagarExecutado extends Component {
   constructor(props) {
     super(props);
@@ -57,13 +56,6 @@ class TabelaDadosContasAPagarExecutado extends Component {
         [centroCustoKey]: !prevState.expandedCentroCusto[centroCustoKey],
       },
     }));
-  }
-
-  formatarEmReais(valor) {
-    return valor.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
   }
 
   render() {
@@ -154,24 +146,24 @@ class TabelaDadosContasAPagarExecutado extends Component {
                     <td>
                       <MDBTooltip
                         tag="span"
-                        title={`Total Débito: ${this.formatarEmReais(grupo.totalDebito)}`}
+                        title={`Total Débito: ${grupo.totalDebito.toFixed(2)}`}
                       >
                         <span style={{ color: "red" }}>
-                          {this.formatarEmReais(grupo.totalDebito)}
+                          {grupo.totalDebito.toFixed(2)}
                         </span>
                       </MDBTooltip>
                     </td>
                     <td>
                       <MDBTooltip
                         tag="span"
-                        title={`Total Crédito: ${this.formatarEmReais(grupo.totalCredito)}`}
+                        title={`Total Crédito: ${grupo.totalCredito.toFixed(2)}`}
                       >
                         <span style={{ color: "green" }}>
-                          {this.formatarEmReais(grupo.totalCredito)}
+                          {grupo.totalCredito.toFixed(2)}
                         </span>
                       </MDBTooltip>
                     </td>
-                    <td>{this.formatarEmReais(saldoTotal)}</td>
+                    <td>{saldoTotal.toFixed(2)}</td>
                     {mesesUnicos.map((mes, idx) => {
                       const mensalDebito = acumulativoMensalDebito.find(
                         (item) =>
@@ -194,9 +186,9 @@ class TabelaDadosContasAPagarExecutado extends Component {
                         <td key={idx}>
                           <MDBTooltip
                             tag="span"
-                            title={`Débito: ${this.formatarEmReais(mensalDebito?.[0]?.total || 0)} - Crédito: ${this.formatarEmReais(mensalCredito?.[0]?.total || 0)}`}
+                            title={`Débito: ${mensalDebito?.[0]?.total.toFixed(2)} - Crédito: ${mensalCredito?.[0]?.total.toFixed(2)}`}
                           >
-                            {this.formatarEmReais(totalMensal)}
+                            {totalMensal.toFixed(2)}
                           </MDBTooltip>
                         </td>
                       );
@@ -216,7 +208,7 @@ class TabelaDadosContasAPagarExecutado extends Component {
                           <td colSpan="4">
                             {origem.formas_pagamento.map((forma, idx) => (
                               <div key={idx}>
-                                {forma.condicao}: {this.formatarEmReais(forma.somatorio_valor)}
+                                {forma.condicao}: {forma.somatorio_valor.toFixed(2)}
                               </div>
                             ))}
                           </td>
