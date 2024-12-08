@@ -7,19 +7,17 @@ import {
   MDBIcon,
   MDBTooltip,
 } from "mdb-react-ui-kit";
-import  './style.css';
+
 class TabelaDadosContasAPagarExecutado extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dadosDebito: this.processarDados(props.dados_origens_debito, 'debito'),
-      dadosCredito: this.processarDados(props.dados_origens_credito, 'credito'),
+      dadosDebito: props.dados_origens_debito || [],
+      dadosCredito: props.dados_origem_credito || [],
       acumulativoMensalDebito: props.acumulativoMensal_origens_debito || [],
       acumulativoMensalCredito: props.acumulativoMensal_origens_credito || [],
       expandedCentroCusto: {}, // Controla os centros de custo expandidos
     };
-    console.log(props.dados_origens_debito);
-    console.log(props.dados_origens_credito);
   }
 
   componentDidUpdate(prevProps) {
@@ -32,20 +30,12 @@ class TabelaDadosContasAPagarExecutado extends Component {
         this.props.acumulativoMensal_origens_credito
     ) {
       this.setState({
-        dadosDebito: this.processarDados(this.props.dados_origens_debito, 'debito'),
-        dadosCredito: this.processarDados(this.props.dados_origens_credito, 'credito'),
+        dadosDebito: this.props.dados_origens_debito || [],
+        dadosCredito: this.props.dados_origem_credito || [],
         acumulativoMensalDebito: this.props.acumulativoMensal_origens_debito || [],
         acumulativoMensalCredito: this.props.acumulativoMensal_origens_credito || [],
       });
     }
-  }
-
-  // Função para processar os dados e adicionar o tipo (crédito ou débito)
-  processarDados(dados, tipo) {
-    return dados.map((linha) => ({
-      ...linha,
-      tipo, // Adiciona o tipo (crédito ou débito) para a linha
-    }));
   }
 
   // Alterna a expansão de um centro de custo específico
@@ -84,7 +74,7 @@ class TabelaDadosContasAPagarExecutado extends Component {
             origens: [],
           };
         }
-        if (linha.tipo === 'debito') {
+        if (linha.total < 0) {
           acc[key].totalDebito += Math.abs(linha.total);
         } else {
           acc[key].totalCredito += linha.total;
@@ -108,7 +98,7 @@ class TabelaDadosContasAPagarExecutado extends Component {
       <div className="container mt-4">
         <MDBTable striped bordered hover responsive>
           <MDBTableHead>
-            <tr  className="sticky-header">
+            <tr>
               <th>Empresa</th>
               <th>Revenda</th>
               <th>Centro de Custo</th>
@@ -123,7 +113,8 @@ class TabelaDadosContasAPagarExecutado extends Component {
           <MDBTableBody>
             {Object.entries(dadosAgrupados).map(([key, grupo]) => {
               const isExpanded = expandedCentroCusto[key];
-              const saldoTotal = grupo.totalCredito - grupo.totalDebito;
+              const saldoTotal =
+                grupo.totalCredito - grupo.totalDebito;
 
               return (
                 <React.Fragment key={key}>
@@ -184,37 +175,26 @@ class TabelaDadosContasAPagarExecutado extends Component {
                         (mensalDebito?.[0]?.total || 0);
                       return (
                         <td key={idx}>
-                          <MDBTooltip
-                            tag="span"
-                            title={`Débito: ${mensalDebito?.[0]?.total.toFixed(2)} - Crédito: ${mensalCredito?.[0]?.total.toFixed(2)}`}
-                          >
-                            {totalMensal.toFixed(2)}
-                          </MDBTooltip>
+                          {totalMensal.toFixed(2)}
                         </td>
                       );
                     })}
                   </tr>
                   {isExpanded &&
-                    grupo.origens.map((origem, origemIdx) => {
-                      const origemClass = origem.tipo === 'debito' ? "bg-danger-light" : "bg-success";
-                      return (
-                        <tr
-                          key={`${key}_${origemIdx}`}
-                          className={origemClass}
-                        >
-                          <td colSpan="2" className="text-end">
-                            {origem.origem}
-                          </td>
-                          <td colSpan="4">
-                            {origem.formas_pagamento.map((forma, idx) => (
-                              <div key={idx}>
-                                {forma.condicao}: {forma.somatorio_valor.toFixed(2)}
-                              </div>
-                            ))}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    grupo.origens.map((origem, origemIdx) => (
+                      <tr key={`${key}_${origemIdx}`} className="bg-light">
+                        <td colSpan="2" className="text-end">
+                          {origem.origem}
+                        </td>
+                        <td colSpan="4">
+                          {origem.formas_pagamento.map((forma, idx) => (
+                            <div key={idx}>
+                              {forma.condicao}: {forma.somatorio_valor.toFixed(2)}
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
                 </React.Fragment>
               );
             })}

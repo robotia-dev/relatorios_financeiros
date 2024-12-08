@@ -1,0 +1,11 @@
+.bg-danger-light {
+    background-color: rgba(220, 53, 69, 0.2) !important; /* Red suave com transparência */
+  }
+
+  .sticky-header th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa; /* Adiciona uma cor de fundo, pode ser personalizada */
+    z-index: 1; /* Garante que o cabeçalho fique sobre os dados */
+  }
+  

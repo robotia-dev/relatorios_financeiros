@@ -94,30 +94,33 @@ class DataModal extends Component {
 
               {reports && (
                 <>
-                  <p>Iniciando Tabela de Dados Contas A Pagar Aberto...</p>
+                  {/* <p>Iniciando Tabela de Dados Contas A Pagar Aberto...</p>
                   <TabelaDadosContasAPagarAberto
                     dados={reports.pagar_aberto.dados}
                     acumulativoMensal={reports.pagar_aberto.acumulativo_mensal}
-                  /> 
+                  />  */}
 
                   <p>Iniciando Tabela de Dados Contas A Pagar Executado...</p>
                   <TabelaDadosContasAPagarExecutado
-                    dados={reports.pagar_executado.dados}
-                    acumulativoMensal={reports.pagar_executado.acumulativo_mensal}
-                  />
+                    dados_origens_debito={reports.pagar_executado.dados}
+                    acumulativoMensal_origens_debito={reports.pagar_executado.acumulativo_mensal}
+                    dados_origens_credito={reports.receber_executado.dados}
+                    acumulativoMensal_origens_credito={reports.receber_executado.acumulativo_mensal}
+
+                  />    
 
 
-                  <p>Iniciando Tabela de Dados Contas A Receber Aberto...</p>
+                  {/* <p>Iniciando Tabela de Dados Contas A Receber Aberto...</p>
                   <TabelaDadosContasAReceberAberto
                     dados={reports.receber_aberto.dados}
                     acumulativoMensal={reports.receber_aberto.acumulativo_mensal}
-                  />
+                  /> */}
 
-                  <p>Iniciando Tabela de Dados Contas A Receber Executado...</p>
+                  {/* <p>Iniciando Tabela de Dados Contas A Receber Executado...</p>
                   <TabelaDadosContasAReceberExecutado
                     dados={reports.receber_executado.dados}
                     acumulativoMensal={reports.receber_executado.acumulativo_mensal}
-                  />
+                  /> */}
                 </>
               )}
             </MDBModalBody>

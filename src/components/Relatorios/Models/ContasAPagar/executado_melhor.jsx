@@ -108,7 +108,7 @@ class TabelaDadosContasAPagarExecutado extends Component {
       <div className="container mt-4">
         <MDBTable striped bordered hover responsive>
           <MDBTableHead>
-            <tr  className="sticky-header">
+            <tr >
               <th>Empresa</th>
               <th>Revenda</th>
               <th>Centro de Custo</th>
