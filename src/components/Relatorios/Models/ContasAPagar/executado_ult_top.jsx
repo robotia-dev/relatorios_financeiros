@@ -18,7 +18,6 @@ class TabelaDadosContasAPagarExecutado extends Component {
       acumulativoMensalDebito: props.acumulativoMensal_origens_debito || [],
       acumulativoMensalCredito: props.acumulativoMensal_origens_credito || [],
       expandedCentroCusto: {}, // Controla os centros de custo expandidos
-      mostrarDetalhamentoMensal: false, // Estado para controlar a visibilidade das colunas mensais
     };
     console.log(props.dados_origens_debito);
     console.log(props.dados_origens_credito);
@@ -60,13 +59,6 @@ class TabelaDadosContasAPagarExecutado extends Component {
     }));
   }
 
-  // Alterna a visibilidade do detalhamento mensal
-  toggleDetalhamentoMensal() {
-    this.setState((prevState) => ({
-      mostrarDetalhamentoMensal: !prevState.mostrarDetalhamentoMensal,
-    }));
-  }
-
   formatarEmReais(valor) {
     return valor.toLocaleString('pt-BR', {
       style: 'currency',
@@ -81,7 +73,6 @@ class TabelaDadosContasAPagarExecutado extends Component {
       acumulativoMensalDebito,
       acumulativoMensalCredito,
       expandedCentroCusto,
-      mostrarDetalhamentoMensal,
     } = this.state;
 
     if (!dadosDebito.length && !dadosCredito.length) {
@@ -121,43 +112,26 @@ class TabelaDadosContasAPagarExecutado extends Component {
       ]),
     ];
 
-    // Somar valores das formas de pagamento
-    const somarFormasPagamento = (formasPagamento) => {
-      const totais = {};
-      formasPagamento.forEach((forma) => {
-        if (!totais[forma.condicao]) {
-          totais[forma.condicao] = 0;
-        }
-        totais[forma.condicao] += forma.somatorio_valor;
-      });
-      return totais;
-    };
-
     return (
       <div className="container mt-4">
-        <MDBBtn color="primary" onClick={() => this.toggleDetalhamentoMensal()}>
-          {mostrarDetalhamentoMensal ? "Ocultar Detalhamento Mensal" : "Mostrar Detalhamento Mensal"}
-        </MDBBtn>
         <MDBTable striped bordered hover responsive>
           <MDBTableHead>
-            <tr className="sticky-header">
+            <tr  className="sticky-header">
               <th>Empresa</th>
               <th>Revenda</th>
               <th>Centro de Custo</th>
               <th>Débito Total</th>
               <th>Crédito Total</th>
               <th>Saldo Total</th>
-              {mostrarDetalhamentoMensal &&
-                mesesUnicos.map((mes, idx) => (
-                  <th key={idx}>{mes || "Mês N/A"}</th>
-                ))}
+              {mesesUnicos.map((mes, idx) => (
+                <th key={idx}>{mes || "Mês N/A"}</th>
+              ))}
             </tr>
           </MDBTableHead>
           <MDBTableBody>
             {Object.entries(dadosAgrupados).map(([key, grupo]) => {
               const isExpanded = expandedCentroCusto[key];
               const saldoTotal = grupo.totalCredito - grupo.totalDebito;
-              const totaisFormasPagamento = somarFormasPagamento(grupo.formasPagamento);
 
               return (
                 <React.Fragment key={key}>
@@ -198,7 +172,7 @@ class TabelaDadosContasAPagarExecutado extends Component {
                       </MDBTooltip>
                     </td>
                     <td>{this.formatarEmReais(saldoTotal)}</td>
-                    {mostrarDetalhamentoMensal && mesesUnicos.map((mes, idx) => {
+                    {mesesUnicos.map((mes, idx) => {
                       const mensalDebito = acumulativoMensalDebito.find(
                         (item) =>
                           item[0]?.mes === mes &&
@@ -228,47 +202,27 @@ class TabelaDadosContasAPagarExecutado extends Component {
                       );
                     })}
                   </tr>
-
-                  {/* Linha de Detalhamento das Origens */}
-                  {isExpanded && grupo.origens.map((origem, origemIdx) => {
-                    const origemClass = origem.tipo === 'debito' ? "bg-danger-light" : "bg-success-edited";
-                    return (
-                      <tr key={`${key}_${origemIdx}`} className={origemClass}>
-                        <td colSpan="2" className="text-end">
-                          {origem.origem} - <strong>{origem.tipo.toUpperCase()}</strong>
-                        </td>
-                        <td colSpan="4">
-                          {this.formatarEmReais(origem.total)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-
-                  {/* Linha das Formas de Pagamento (abaixo das origens) */}
-                  {isExpanded && (
-                    <tr className="bg-light">
-                      <td colSpan="6">
-                        <strong>Formas de Pagamento:</strong>
-                        {Object.entries(totaisFormasPagamento).map(([condicao, total]) => (
-                          <div key={condicao}>
-                            {condicao}: {this.formatarEmReais(total)}
-                          </div>
-                        ))}
-                      </td>
-                    </tr>
-                  )}
-
-                  {/* Linha de Total das Origens (abaixo das formas de pagamento) */}
-                  {isExpanded && (
-                    <tr className="totalizador">
-                      <td colSpan="2" className=" text-end">
-                        TOTAL DO CENTRO DE CUSTO / DEPARTAMENTO:
-                      </td>
-                      <td colSpan="4">
-                        {this.formatarEmReais(grupo.totalCredito - grupo.totalDebito)}
-                      </td>
-                    </tr>
-                  )}
+                  {isExpanded &&
+                    grupo.origens.map((origem, origemIdx) => {
+                      const origemClass = origem.tipo === 'debito' ? "bg-danger-light" : "bg-success";
+                      return (
+                        <tr
+                          key={`${key}_${origemIdx}`}
+                          className={origemClass}
+                        >
+                          <td colSpan="2" className="text-end">
+                            {origem.origem}
+                          </td>
+                          <td colSpan="4">
+                            {origem.formas_pagamento.map((forma, idx) => (
+                              <div key={idx}>
+                                {forma.condicao}: {this.formatarEmReais(forma.somatorio_valor)}
+                              </div>
+                            ))}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </React.Fragment>
               );
             })}
